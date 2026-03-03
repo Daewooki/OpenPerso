@@ -1,176 +1,383 @@
-# OpenPerso
+<div align="center">
 
-**Open-source AI character chat platform** — Create, share, and chat with AI characters.
+# 🎭 OpenPerso
 
-[한국어](#한국어) | [English](#english)
+### Open-source AI Character Chat Platform
+
+**누구나 AI 캐릭터를 만들고, 대화하고, 공유하는 오픈소스 플랫폼**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+[한국어](#-openperso-1) | [English](#-overview) | [Quick Start](#-quick-start) | [Contributing](#-contributing)
+
+</div>
 
 ---
 
-## 한국어
+<!-- 
+  📸 Screenshots placeholder
+  프로젝트 스크린샷을 docs/screenshots/ 폴더에 추가한 후 아래 주석을 해제하세요.
+  
+  <div align="center">
+    <img src="docs/screenshots/explore.png" width="80%" alt="Explore Page" />
+    <br /><br />
+    <img src="docs/screenshots/chat.png" width="80%" alt="Chat Interface" />
+  </div>
+-->
 
-### OpenPerso란?
+## 📖 Overview
 
-누구나 AI 캐릭터를 만들고, 대화하고, 공유할 수 있는 오픈소스 플랫폼입니다.
+OpenPerso is a self-hostable, open-source alternative to Character.AI. Build your own AI character platform with full control over your data, models, and user experience.
 
-- AI 캐릭터를 이름과 한 줄 설명만으로 원클릭 생성
-- 텍스트 채팅 + 음성 대화 (TTS) 지원
-- 대화 중 이미지 자동 생성
-- 사용자별 기억(메모리) 시스템
-- 30+ 시드 캐릭터 제공 (유명인, K-콘텐츠, 게임, 힐링 등)
-- 게스트 3턴 무료 체험
-- PWA 지원 (모바일 홈 화면 추가)
+### Why OpenPerso?
 
-### 기술 스택
+- **🔓 Open Source** — Full transparency. Self-host on your own infrastructure.
+- **🤖 Model Agnostic** — Works with any OpenAI-compatible API (OpenAI, Claude, local LLMs via Ollama, etc.)
+- **🧠 Memory System** — Characters remember past conversations with hybrid global + per-character memory.
+- **🎨 One-Click Creation** — Generate a complete character from just a name and description.
+- **🌐 Shareable** — Create characters and share them with the community.
+- **📱 Mobile Ready** — PWA support for mobile home screen installation.
 
-| 영역 | 기술 |
-|------|------|
-| Backend | FastAPI, SQLAlchemy 2.0 (async), Alembic |
-| Frontend | Next.js 16 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
-| Database | PostgreSQL 16 + pgvector |
-| Cache | Redis |
-| Storage | MinIO (S3 호환) |
-| LLM | OpenAI 호환 API |
-| Auth | JWT (이메일/비밀번호, Google OAuth) |
+---
 
-### 빠른 시작
+## ✨ Features
 
-#### 사전 요구사항
+<table>
+<tr>
+<td width="50%">
 
-- Docker & Docker Compose
-- Node.js 20+
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/) (Python 패키지 매니저)
+### 💬 Intelligent Chat
+- Real-time SSE streaming responses
+- In-chat image generation
+- Conversation starters per character
+- Short-term memory with auto-summarization (20+ turns)
 
-#### 1. 레포 클론 & 환경 설정
+</td>
+<td width="50%">
+
+### 🎭 Character Creation
+- AI-powered one-click character generation
+- AI avatar generation (DALL·E / gpt-image)
+- Personality sliders (warmth, humor, formality, etc.)
+- Category system (celebrities, K-content, games, helpers, friends, healing)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🧠 Memory System
+- **Global Memory**: Rule-based, real-time extraction (name, preferences, facts)
+- **Per-Character Memory**: LLM-based, async extraction (relationship, context)
+- Vector embeddings via pgvector for semantic recall
+
+</td>
+<td width="50%">
+
+### 🔊 Voice & Multimodal
+- Text-to-Speech via OpenAI TTS API
+- Multiple voice options per character
+- Speech-to-Text via Web Speech API
+- Image generation during conversations
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🔍 Explore & Discover
+- Staff Picks / Trending / Newly Created sections
+- Category-based filtering
+- Search with keyword matching
+- Chat count display on character cards
+
+</td>
+<td width="50%">
+
+### 🛡️ Production Ready
+- JWT authentication (email/password + Google OAuth)
+- API rate limiting with Redis
+- Guest trial (3 turns without sign-up)
+- Account deletion with CASCADE cleanup
+- Privacy policy & Terms of Service pages
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  Frontend (Next.js 16)                   │
+│                                                         │
+│  Landing ─ Explore ─ Create ─ Chat ─ Profile ─ Pricing  │
+└──────────────────────┬──────────────────────────────────┘
+                       │ HTTP / SSE
+              ┌────────▼────────┐
+              │  FastAPI Backend │
+              │                 │
+              │  Auth ─ Chat    │
+              │  Persona ─ LLM  │
+              │  Memory ─ TTS   │
+              │  Image ─ Admin  │
+              └──┬──────┬──────┬┘
+                 │      │      │
+     ┌───────────┘      │      └───────────┐
+     │                  │                  │
+┌────▼─────┐    ┌───────▼───────┐   ┌──────▼──────┐
+│PostgreSQL │    │     Redis     │   │    MinIO     │
+│+ pgvector │    │  Cache/Queue  │   │  S3 Storage  │
+└──────────┘    └───────────────┘   └─────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 16 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
+| **Backend** | FastAPI, Python 3.12, SQLAlchemy 2.0 (async), Alembic |
+| **Database** | PostgreSQL 16 + pgvector |
+| **Cache** | Redis |
+| **Storage** | MinIO (S3-compatible) |
+| **LLM** | Any OpenAI-compatible API |
+| **TTS** | OpenAI TTS API |
+| **Auth** | JWT + Google OAuth |
+| **Infra** | Docker Compose (dev) → Kubernetes (prod) |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Docker & Docker Compose** (for PostgreSQL, Redis, MinIO)
+- **Node.js 20+** and npm
+- **Python 3.12+**
+- **[uv](https://docs.astral.sh/uv/)** (recommended Python package manager)
+- **OpenAI API Key** (or any OpenAI-compatible API)
+
+### 1. Clone & Configure
 
 ```bash
 git clone https://github.com/Daewooki/OpenPerso.git
 cd OpenPerso
 
+# Copy environment template
 cp .env.example .env
-# .env 파일을 열어 API 키 등을 설정하세요
 ```
 
-#### 2. 인프라 서비스 실행
+Edit `.env` and fill in your API keys:
+
+```env
+# Required: Your LLM API key
+LLM_API_KEY=sk-your-openai-api-key
+LLM_SUB_API_KEY=sk-your-openai-api-key
+
+# Change in production!
+SECRET_KEY=your-secret-key-here
+POSTGRES_PASSWORD=your-secure-password
+```
+
+### 2. Start Infrastructure
 
 ```bash
 docker-compose up -d
-# PostgreSQL, Redis, MinIO가 실행됩니다
 ```
 
-#### 3. 백엔드 실행
+This starts PostgreSQL (port 5434), Redis (port 6381), and MinIO (port 9200).
+
+### 3. Start Backend
 
 ```bash
 cd backend
+
+# Install dependencies
 uv sync
-PYTHONPATH=. uv run alembic upgrade head   # DB 마이그레이션
+
+# Run database migrations
+PYTHONPATH=. uv run alembic upgrade head
+
+# Start the server
 PYTHONPATH=. .venv/bin/uvicorn app.main:app --reload --port 8200
 ```
 
-#### 4. 프론트엔드 실행
+An admin account is auto-created on first startup (configure via `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env`).
+
+### 4. Start Frontend
 
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Start dev server
 npm run dev -- -p 3200
 ```
 
-`http://localhost:3200`에서 서비스를 확인하세요.
+### 5. Open
 
-#### 5. (선택) 시드 데이터
+Visit **http://localhost:3200** and start creating AI characters!
+
+### 6. (Optional) Seed Characters
 
 ```bash
 cd backend
 PYTHONPATH=. .venv/bin/python scripts/seed_personas.py
 ```
 
-### 프로젝트 구조
+This adds 6 sample characters (Einstein, Sherlock Holmes, Coding Mentor, etc.)
+
+---
+
+## 📁 Project Structure
 
 ```
 openperso/
 ├── backend/
 │   ├── app/
-│   │   ├── api/v1/         # API 엔드포인트
-│   │   ├── models/         # SQLAlchemy 모델
-│   │   ├── schemas/        # Pydantic 스키마
-│   │   ├── services/       # 비즈니스 로직
-│   │   └── workers/        # 백그라운드 작업
-│   ├── alembic/            # DB 마이그레이션
-│   └── scripts/            # 유틸리티 스크립트
+│   │   ├── api/v1/          # REST API endpoints
+│   │   │   ├── auth.py      # Login, register, JWT
+│   │   │   ├── chat.py      # SSE streaming chat
+│   │   │   ├── personas.py  # CRUD + generation
+│   │   │   ├── explore.py   # Featured, trending, new
+│   │   │   ├── guest.py     # Guest trial (3 turns)
+│   │   │   ├── voice.py     # TTS endpoints
+│   │   │   └── ...
+│   │   ├── models/           # SQLAlchemy ORM models
+│   │   ├── schemas/          # Pydantic validation
+│   │   ├── services/         # Business logic
+│   │   │   ├── chat.py       # Chat + streaming
+│   │   │   ├── llm.py        # LLM abstraction layer
+│   │   │   ├── memory.py     # Memory extraction
+│   │   │   ├── persona_gen.py # AI character generation
+│   │   │   ├── image_gen.py  # Image generation
+│   │   │   ├── tts.py        # Text-to-speech
+│   │   │   └── ...
+│   │   └── workers/          # Background tasks
+│   ├── alembic/              # DB migrations
+│   └── scripts/              # Seed data, utilities
 ├── frontend/
 │   └── src/
-│       ├── app/            # Next.js App Router 페이지
-│       ├── components/     # React 컴포넌트
-│       ├── hooks/          # Custom hooks
-│       ├── lib/            # 유틸리티
-│       └── types/          # TypeScript 타입
-├── nginx/                  # Reverse proxy 설정
-├── docker-compose.yml      # 인프라 서비스
-└── docker-compose.prod.yml # 프로덕션 배포
+│       ├── app/              # Next.js pages (App Router)
+│       │   ├── (auth)/       # Login, Register
+│       │   ├── (main)/       # Explore, Chat, Create, Profile
+│       │   └── trial/        # Guest trial
+│       ├── components/       # Reusable React components
+│       ├── hooks/            # Custom React hooks
+│       ├── lib/              # API client, utilities
+│       └── types/            # TypeScript definitions
+├── nginx/                    # Reverse proxy config
+├── docker-compose.yml        # Dev infrastructure
+├── docker-compose.prod.yml   # Production deployment
+└── docs/                     # Planning documents
 ```
-
-### 환경 변수
-
-`.env.example` 파일을 참고하여 `.env`를 설정하세요.
-
-> **주의**: 기본값은 로컬 개발용입니다. 프로덕션 배포 시 반드시 모든 비밀번호와 시크릿 키를 변경하세요.
-
-| 변수 | 설명 | 필수 |
-|------|------|------|
-| `LLM_API_KEY` | OpenAI API 키 | Yes |
-| `SECRET_KEY` | JWT 시크릿 키 | Yes (프로덕션) |
-| `POSTGRES_PASSWORD` | DB 비밀번호 | Yes (프로덕션) |
-
-### 스크린샷
-
-> 곧 추가 예정
 
 ---
 
-## English
+## 🔧 Configuration
 
-### What is OpenPerso?
+### Environment Variables
 
-An open-source platform where anyone can create, share, and chat with AI characters.
+All configuration is done via `.env` file. See [`.env.example`](.env.example) for the full list.
 
-- One-click character creation from just a name and description
-- Text chat + voice conversation (TTS)
-- In-chat image generation
-- Per-user memory system
-- 30+ seed characters (celebrities, K-content, games, healing, etc.)
-- 3-turn guest trial without sign-up
-- PWA support
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `LLM_API_KEY` | OpenAI (or compatible) API key | ✅ |
+| `LLM_MODEL` | Main chat model (default: `gpt-4o`) | |
+| `LLM_SUB_API_KEY` | API key for auxiliary tasks | ✅ |
+| `LLM_SUB_MODEL` | Auxiliary model (default: `gpt-4o-mini`) | |
+| `SECRET_KEY` | JWT signing secret | ✅ prod |
+| `POSTGRES_PASSWORD` | Database password | ✅ prod |
+| `ADMIN_EMAIL` | Auto-created admin email | |
+| `ADMIN_PASSWORD` | Auto-created admin password | |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | |
 
-### Quick Start
+### Using Different LLM Providers
 
-```bash
-git clone https://github.com/Daewooki/OpenPerso.git
-cd OpenPerso
-cp .env.example .env
-# Edit .env with your API keys
+OpenPerso works with any OpenAI-compatible API:
 
-# Infrastructure
-docker-compose up -d
+```env
+# OpenAI (default)
+LLM_API_URL=https://api.openai.com/v1
+LLM_MODEL=gpt-4o
 
-# Backend
-cd backend && uv sync
-PYTHONPATH=. uv run alembic upgrade head
-PYTHONPATH=. .venv/bin/uvicorn app.main:app --reload --port 8200
+# Ollama (local)
+LLM_API_URL=http://localhost:11434/v1
+LLM_MODEL=llama3
 
-# Frontend (in another terminal)
-cd frontend && npm install && npm run dev -- -p 3200
+# Any OpenAI-compatible provider
+LLM_API_URL=https://your-provider.com/v1
+LLM_MODEL=your-model-name
 ```
 
-Visit `http://localhost:3200`.
+---
 
-### Contributing
+## 🗺️ Roadmap
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+- [x] Text chat with SSE streaming
+- [x] AI character generation (one-click)
+- [x] Memory system (global + per-character)
+- [x] AI avatar generation
+- [x] In-chat image generation
+- [x] Voice output (TTS)
+- [x] Guest trial mode
+- [x] Explore page (featured, trending, new)
+- [x] PWA support
+- [x] SEO (sitemap, OG tags)
+- [ ] Voice input (real-time STT)
+- [ ] Voice chat mode (bidirectional)
+- [ ] Avatar animation (lip-sync)
+- [ ] Group chat (multiple characters)
+- [ ] Character marketplace
+- [ ] Creator analytics dashboard
+- [ ] Plugin system
+- [ ] Multi-language support (i18n)
 
-### License
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+```bash
+# Fork → Clone → Branch → Code → PR
+git checkout -b feature/amazing-feature
+git commit -m 'feat: add amazing feature'
+git push origin feature/amazing-feature
+```
+
+---
+
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Built with FastAPI, Next.js, and OpenAI API.
+## 🙏 Acknowledgments
+
+- [FastAPI](https://fastapi.tiangolo.com/) — Modern Python web framework
+- [Next.js](https://nextjs.org/) — React framework
+- [shadcn/ui](https://ui.shadcn.com/) — UI component library
+- [OpenAI API](https://platform.openai.com/) — LLM, TTS, and image generation
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if you find it useful!**
+
+Made with ❤️ by [Daewooki](https://github.com/Daewooki)
+
+</div>
