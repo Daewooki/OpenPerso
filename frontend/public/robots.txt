@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# Update the sitemap URL to your production domain
+# Sitemap: https://your-domain.com/sitemap.xml

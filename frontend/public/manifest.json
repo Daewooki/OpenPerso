@@ -1,0 +1,24 @@
+{
+  "name": "OpenPerso - AI 캐릭터 플랫폼",
+  "short_name": "OpenPerso",
+  "description": "누구나 AI 캐릭터를 만들고, 대화하고, 공유하는 오픈 플랫폼",
+  "start_url": "/explore",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
