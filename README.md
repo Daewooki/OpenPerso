@@ -18,16 +18,11 @@
 
 ---
 
-<!-- 
-  📸 Screenshots placeholder
-  프로젝트 스크린샷을 docs/screenshots/ 폴더에 추가한 후 아래 주석을 해제하세요.
-  
-  <div align="center">
-    <img src="docs/screenshots/explore.png" width="80%" alt="Explore Page" />
-    <br /><br />
-    <img src="docs/screenshots/chat.png" width="80%" alt="Chat Interface" />
-  </div>
--->
+<div align="center">
+  <img src="docs/screenshots/landing.png" width="90%" alt="OpenPerso Landing Page" />
+</div>
+
+<br />
 
 ## 📖 Overview
 
@@ -41,6 +36,14 @@ OpenPerso is a self-hostable, open-source alternative to Character.AI. Build you
 - **🎨 One-Click Creation** — Generate a complete character from just a name and description.
 - **🌐 Shareable** — Create characters and share them with the community.
 - **📱 Mobile Ready** — PWA support for mobile home screen installation.
+
+<div align="center">
+<img src="docs/screenshots/mobile-landing.png" width="180" alt="Mobile View" />
+&nbsp;&nbsp;&nbsp;
+<img src="docs/screenshots/mobile-explore.png" width="180" alt="Mobile Explore" />
+<br />
+<sub>📱 모바일 최적화 (PWA)</sub>
+</div>
 
 ---
 
@@ -108,6 +111,33 @@ OpenPerso is a self-hostable, open-source alternative to Character.AI. Build you
 </td>
 </tr>
 </table>
+
+<details open>
+<summary><b>📸 Screenshots</b></summary>
+<br />
+<table>
+<tr>
+<td width="50%" align="center">
+<b>🔍 Explore — 페르소나 탐색</b><br /><br />
+<img src="docs/screenshots/explore-loggedin.png" alt="Explore Page" />
+</td>
+<td width="50%" align="center">
+<b>🎭 Persona — 캐릭터 상세</b><br /><br />
+<img src="docs/screenshots/persona-detail.png" alt="Persona Detail" />
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<b>💬 Chat — 실시간 대화</b><br /><br />
+<img src="docs/screenshots/chat.png" alt="Chat Interface" />
+</td>
+<td width="50%" align="center">
+<b>✨ Create — 원클릭 생성</b><br /><br />
+<img src="docs/screenshots/create.png" alt="Create Persona" />
+</td>
+</tr>
+</table>
+</details>
 
 ---
 
@@ -320,6 +350,16 @@ LLM_MODEL=llama3
 LLM_API_URL=https://your-provider.com/v1
 LLM_MODEL=your-model-name
 ```
+
+---
+
+## 💰 Pricing Model
+
+OpenPerso includes a built-in freemium pricing UI — ready for monetization.
+
+<div align="center">
+<img src="docs/screenshots/pricing.png" width="80%" alt="Pricing Page" />
+</div>
 
 ---
 

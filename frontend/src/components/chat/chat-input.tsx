@@ -22,7 +22,8 @@ export function ChatInput({
   const [value, setValue] = useState("");
   const [isListening, setIsListening] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -46,8 +47,9 @@ export function ChatInput({
   };
 
   const startListening = useCallback(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition: typeof window.SpeechRecognition }).webkitSpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    const SpeechRecognition = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
@@ -55,9 +57,9 @@ export function ChatInput({
     recognition.interimResults = true;
     recognition.continuous = false;
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       const transcript = Array.from(event.results)
-        .map((result) => result[0].transcript)
+        .map((result: any) => result[0].transcript)
         .join("");
       setValue(transcript);
 
@@ -90,8 +92,8 @@ export function ChatInput({
 
   const hasSpeechRecognition =
     typeof window !== "undefined" &&
-    (!!window.SpeechRecognition ||
-      !!(window as unknown as { webkitSpeechRecognition: unknown }).webkitSpeechRecognition);
+    (!!(window as any).SpeechRecognition ||
+      !!(window as any).webkitSpeechRecognition);
 
   return (
     <div className="flex items-end gap-2 rounded-2xl border border-border/50 bg-card/60 p-2 backdrop-blur-sm transition-colors focus-within:border-primary/30">
